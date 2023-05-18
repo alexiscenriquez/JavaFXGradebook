@@ -8,8 +8,9 @@ module com.gradebook.gradebook {
     requires java.sql;
     requires com.jfoenix;
 
-    opens com.gradebook.gradebook to javafx.fxml;
-    exports com.gradebook.gradebook;
-    exports com.gradebook.gradebook.controllers;
-    opens com.gradebook.gradebook.controllers to javafx.fxml;
+    opens gradebook to javafx.fxml;
+    exports gradebook;
+    exports gradebook.controllers;
+    opens gradebook.controllers to javafx.fxml;
+    opens gradebook.models to javafx.base;
 }

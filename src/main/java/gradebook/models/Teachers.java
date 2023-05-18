@@ -1,4 +1,4 @@
-package com.gradebook.gradebook.models;
+package gradebook.models;
 
 public class Teachers {
     private int id;

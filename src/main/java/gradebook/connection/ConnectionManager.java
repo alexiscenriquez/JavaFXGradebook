@@ -1,4 +1,4 @@
-package com.gradebook.gradebook.connection;
+package gradebook.connection;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

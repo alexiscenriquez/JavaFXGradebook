@@ -1,13 +1,11 @@
-package com.gradebook.gradebook.controllers;
+package gradebook.controllers;
 
-import com.gradebook.gradebook.HelloApplication;
-import com.gradebook.gradebook.dao.TeacherDaoSql;
+import gradebook.HelloApplication;
+import gradebook.dao.TeacherDaoSql;
 
-import com.gradebook.gradebook.models.Classes;
-import com.gradebook.gradebook.models.Teachers;
+import gradebook.models.Classes;
+import gradebook.models.Teachers;
 import com.jfoenix.controls.JFXListView;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,7 +16,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 public class HelloController {
@@ -43,8 +40,6 @@ Label loginValidation;
             }
             else {
                 FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("gradebook-view.fxml"));
-//                Stage stage = (Stage) password.getScene().getWindow();
-//                stage.close();
                 Parent root = fxmlLoader.load();
 
                 GradebookController gradebookController= fxmlLoader.getController();

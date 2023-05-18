@@ -1,4 +1,4 @@
-package com.gradebook.gradebook;
+package gradebook;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

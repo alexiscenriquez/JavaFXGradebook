@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gradebook.controllers.GradebookController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="500.0" prefWidth="1040.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox fx:id="vbox" layoutX="10.0" layoutY="10.0" prefHeight="480.0" prefWidth="350.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="353.0" text="Welcome" textAlignment="CENTER" fx:id="welcome">
+                     <font>
+                        <Font name="Franklin Gothic Book" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="30.0" prefHeight="29.0" prefWidth="353.0" text="Your Classes" textAlignment="CENTER">
+                     <font>
+                        <Font name="Franklin Gothic Book" size="24.0" />
+                     </font>
+                  </Label>
+              </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>
