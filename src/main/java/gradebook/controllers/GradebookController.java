@@ -60,15 +60,13 @@ public class GradebookController implements Initializable {
                 if (!row.isEmpty() && event.getClickCount() == 1) {
 
                     Classes clickedRow = row.getItem();
-
-
                     FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("class-view.fxml"));
                     try {
                         Parent root = fxmlLoader.load();
                         ClassController classController = fxmlLoader.getController();
                         classController.initData(clickedRow.getId(), teacher);
                         Stage students = new Stage();
-                        students.setScene(new Scene(root, 600, 400));
+                        students.setScene(new Scene(root, 800, 400));
                         students.setTitle("View Student");
 
                         students.show();

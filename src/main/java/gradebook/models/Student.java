@@ -18,6 +18,12 @@ public class Student {
         this.grade = grade;
     }
 
+    public Student(int id, String fName, String lName) {
+        this.fName = fName;
+        this.lName = lName;
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -52,11 +58,12 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "fName='" + fName + '\'' +
-                ", lName='" + lName + '\'' +
-                ", id=" + id +
-                ", grade=" + grade +
-                '}';
+        return
+                id +'\t'+
+                 fName + '\t' +
+                lName + '\t'
+
+
+                ;
     }
 }

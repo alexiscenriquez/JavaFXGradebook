@@ -2,6 +2,7 @@ package gradebook.dao;
 
 import gradebook.connection.ConnectionManager;
 import gradebook.models.Classes;
+import gradebook.models.Student;
 import gradebook.models.Teachers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import org.decimal4j.util.DoubleRounder;
 
 public class TeacherDaoSql implements TeacherDao{
     Connection conn;
@@ -94,6 +96,25 @@ public class TeacherDaoSql implements TeacherDao{
     }
 
     @Override
+    public List<Student> getStudents(int classID) throws SQLException {
+        PreparedStatement pstmt=conn.prepareStatement("select * from student where id not in(select student_id from student_class where class_id=?);");
+        pstmt.setInt(1,classID);
+        ResultSet rs=pstmt.executeQuery();
+        System.out.printf("%20s %20s%n","id","Name");
+        List<Student> studentList=new ArrayList<>();
+
+        while(rs.next()){
+            int id=rs.getInt("id");
+            String fName=rs.getString("first_name");
+            String lName=rs.getString("last_name");
+            Student student=new Student(id,fName,lName);
+            studentList.add(student);
+        }
+
+        return studentList;
+    }
+
+    @Override
     public Classes getClass(int id) {
         try(PreparedStatement pstmt=conn.prepareStatement("Select * from class where id=?")){
             pstmt.setInt(1,id);
@@ -110,5 +131,43 @@ public class TeacherDaoSql implements TeacherDao{
           System.out.println(e.getMessage());
       }
         return null;
+    }
+
+    @Override
+    public Double getClassAverage(int id) throws SQLException {
+        PreparedStatement pstmt= conn.prepareStatement("Select avg(grade) as avg from student_class where class_id=?" );
+        pstmt.setInt(1,id);
+        ResultSet rs= pstmt.executeQuery();
+
+        rs.next();
+
+        return DoubleRounder.round(rs.getDouble("avg"),2);
+    }
+
+    @Override
+    public Double getClassMedian(int id) throws SQLException {
+        PreparedStatement pstmt=conn.prepareStatement("SELECT AVG(grade) as median_val\n" +
+                "FROM (\n" +
+                "SELECT sc.grade, @rownum:=@rownum+1 as `row_number`, @total_rows:=@rownum\n" +
+                "  FROM student_class sc, (SELECT @rownum:=0) r\n" +
+                "  WHERE sc.class_id=?\n" +
+                "  ORDER BY sc.grade\n" +
+                ") as med\n" +
+                "WHERE med.row_number IN ( FLOOR((@total_rows+1)/2), FLOOR((@total_rows+2)/2) );");
+
+        pstmt.setInt(1,id);
+        ResultSet rs= pstmt.executeQuery();
+        rs.next();
+        return DoubleRounder.round(rs.getDouble("median_val"),2);
+    }
+
+    @Override
+    public boolean addStudent(int studentId, int classId, double grade) throws SQLException {
+        PreparedStatement pstmt= conn.prepareStatement("insert into student_class values(?,?,?)");
+        pstmt.setInt(1,classId);
+        pstmt.setInt(2,studentId);
+        pstmt.setDouble(3,grade);
+        int count= pstmt.executeUpdate();
+        return count>0;
     }
 }

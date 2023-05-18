@@ -12,7 +12,7 @@
     <Label fx:id="welcomeText" prefHeight="35.0" prefWidth="97.0" text="Username" />
    <TextField fx:id="username" />
    <Label fx:id="welcomeText1" layoutX="30.0" layoutY="30.0" prefHeight="35.0" prefWidth="97.0" text="Password" />
-   <TextField fx:id="password" accessibleRole="PASSWORD_FIELD" />
+   <PasswordField fx:id="password" accessibleRole="PASSWORD_FIELD" />
     <Button id="login" onAction="#onLoginButtonClick" style="-fx-background-color: lightblue; -fx-text-fill: white;" text="Login" />
    <Label id="loginValidation" fx:id="loginValidation" layoutX="30.0" layoutY="131.0" prefHeight="35.0" prefWidth="154.0" textFill="#e24444" />
 </VBox>

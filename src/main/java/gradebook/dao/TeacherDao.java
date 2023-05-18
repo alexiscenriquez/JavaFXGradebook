@@ -1,6 +1,7 @@
 package gradebook.dao;
 
 import gradebook.models.Classes;
+import gradebook.models.Student;
 import gradebook.models.Teachers;
 import javafx.collections.ObservableList;
 
@@ -17,6 +18,11 @@ public interface TeacherDao {
 
     List<Classes> getTeacherClasses(int id) throws SQLException;
     ObservableList<Map<String,Object>> getClassStudents(int id) throws SQLException;
-
+    List<Student> getStudents(int id)throws SQLException;
     Classes getClass(int id)throws SQLException;
+
+    Double getClassAverage(int id) throws SQLException;
+    Double getClassMedian(int id) throws SQLException;
+
+    boolean addStudent(int studentId, int classId, double grade) throws SQLException;
 }
