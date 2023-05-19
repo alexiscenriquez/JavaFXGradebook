@@ -100,7 +100,6 @@ public class TeacherDaoSql implements TeacherDao{
         PreparedStatement pstmt=conn.prepareStatement("select * from student where id not in(select student_id from student_class where class_id=?);");
         pstmt.setInt(1,classID);
         ResultSet rs=pstmt.executeQuery();
-        System.out.printf("%20s %20s%n","id","Name");
         List<Student> studentList=new ArrayList<>();
 
         while(rs.next()){
@@ -110,7 +109,6 @@ public class TeacherDaoSql implements TeacherDao{
             Student student=new Student(id,fName,lName);
             studentList.add(student);
         }
-
         return studentList;
     }
 

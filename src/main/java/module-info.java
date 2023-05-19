@@ -8,7 +8,10 @@ module com.gradebook.gradebook {
     requires java.sql;
     requires decimal4j;
     requires com.jfoenix;
-
+    requires org.kordamp.ikonli.core;
+    requires org.kordamp.ikonli.javafx;
+    // add icon pack modules
+    requires org.kordamp.ikonli.fontawesome;
 
     opens gradebook to javafx.fxml;
     exports gradebook;

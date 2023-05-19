@@ -18,10 +18,10 @@ public class Student {
         this.grade = grade;
     }
 
-    public Student(int id, String fName, String lName) {
+    public Student(Integer id, String fName, String lName) {
+        this.id = id;
         this.fName = fName;
         this.lName = lName;
-        this.id = id;
     }
 
     public Integer getId() {
@@ -59,8 +59,8 @@ public class Student {
     @Override
     public String toString() {
         return
-                id +'\t'+
-                 fName + '\t' +
+                String.valueOf(id) +'\t'+
+                 fName + ' ' +
                 lName + '\t'
 
 
