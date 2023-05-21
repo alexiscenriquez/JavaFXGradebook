@@ -4,10 +4,9 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gradebook.controllers.ClassController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gradebook.controllers.ClassController">
    <children>
       <HBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -45,27 +44,23 @@
             </VBox>
             <VBox fx:id="vbox2" alignment="CENTER" maxHeight="250.0" maxWidth="300.0" prefHeight="200.0" prefWidth="300.0">
                <children>
-                  <JFXButton mnemonicParsing="false" style="-fx-background-color: #16838C;" fx:id="addStudent" text="Add Student" textFill="WHITE">
+                  <JFXButton fx:id="addStudent" buttonType="RAISED" mnemonicParsing="false" style="-fx-background-color: #16838C;" text="Add Student" textFill="WHITE">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin></JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="105.0" layoutY="123.0" mnemonicParsing="false" style="-fx-background-color: #F02637;" text="Remove Student" textFill="WHITE">
-                     <ripplerFill>
-                        <LinearGradient endX="1.0" endY="1.0">
-                           <stops>
-                              <Stop>
-                                 <color>
-                                    <Color red="0.17430149018764496" green="0.39728179574012756" blue="0.5087719559669495" />
-                                 </color>
-                              </Stop>
-                              <Stop offset="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </Stop>
-                           </stops>
-                        </LinearGradient>
-                     </ripplerFill></JFXButton>
+                  <JFXButton fx:id="updateStudent" buttonType="RAISED" layoutX="89.0" layoutY="107.0" mnemonicParsing="false" style="-fx-background-color: #16838C;" text="Update Student" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="deleteStudent" buttonType="RAISED" layoutX="105.0" layoutY="123.0" mnemonicParsing="false" ripplerFill="WHITE" style="-fx-background-color: #F02637;" text="Remove Student" textFill="WHITE" />
+                  <Label fx:id="entergradelabel" text="Select Student and Enter Grade" visible="false">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXTextField fx:id="grade" maxWidth="-Infinity" prefHeight="25.0" prefWidth="147.0" visible="false" />
+                  <JFXButton fx:id="updatesubmit" buttonType="RAISED" layoutX="81.0" layoutY="96.0" mnemonicParsing="false" style="-fx-background-color: #16838C;" text="Update" textFill="WHITE" visible="false" />
                </children>
             </VBox>
          </children>

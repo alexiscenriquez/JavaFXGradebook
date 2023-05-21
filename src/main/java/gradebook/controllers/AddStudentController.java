@@ -48,9 +48,7 @@ public class AddStudentController implements Initializable {
         } catch (SQLException | IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -68,7 +66,8 @@ public class AddStudentController implements Initializable {
                     a.show();
                 }
                 grade.setText(" ");
-
+                ObservableList<Student> oList = FXCollections.observableArrayList(teacherDaoSql.getStudents(classId));
+                listView.setItems(oList);
             } catch (SQLException ex) {
                 a.setAlertType(Alert.AlertType.ERROR);
                 a.setContentText("Could not add student");
@@ -83,10 +82,9 @@ public class AddStudentController implements Initializable {
                 Parent root = fxmlLoader.load();
                 ClassController classController = fxmlLoader.getController();
                 classController.initData(classId, teacherDaoSql);
-                Stage students = new Stage();
+                Stage students = (Stage) back.getScene().getWindow();
                 students.setScene(new Scene(root, 800, 400));
                 students.setTitle("View Student");
-
                 students.show();
             } catch (IOException exception) {
                 throw new RuntimeException(exception);

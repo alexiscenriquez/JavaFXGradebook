@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+
+import javafx.scene.control.Alert;
 import org.decimal4j.util.DoubleRounder;
 
 public class TeacherDaoSql implements TeacherDao{
@@ -73,26 +75,31 @@ public class TeacherDaoSql implements TeacherDao{
     }
 
     @Override
-    public ObservableList<Map<String, Object>> getClassStudents(int id)throws SQLException {
+    public ObservableList<Map<String, Object>> getClassStudents(int id) {
         final String idColumnKey="id";
         final String fnameColumnKey="fname";
         final String lnameColumnKey="lname";
         final String gradeColumnKey="grade";
-        PreparedStatement pstmt= conn.prepareStatement("SELECT student.id, student.first_name as 'fName',student.last_name as 'lName',grade from student_class join student on student_id=student.id where class_id=?");
-        pstmt.setInt(1,id);
-        ResultSet rs= pstmt.executeQuery();
-        ArrayList<Map<String,Object>> arrList=new ArrayList<>();
-        while(rs.next()){
-            Map<String,Object>map=new HashMap<>();
-            map.put(idColumnKey,rs.getInt("student.id"));
-            map.put(fnameColumnKey,rs.getString("fName"));
-            map.put(lnameColumnKey,rs.getString("lName"));
-            map.put(gradeColumnKey,rs.getDouble("grade"));
+    try (   PreparedStatement pstmt= conn.prepareStatement("SELECT student.id, student.first_name as 'fName',student.last_name as 'lName',grade from student_class join student on student_id=student.id where class_id=?")) {
+        pstmt.setInt(1, id);
+        ResultSet rs = pstmt.executeQuery();
+        ArrayList<Map<String, Object>> arrList = new ArrayList<>();
+        while (rs.next()) {
+            Map<String, Object> map = new HashMap<>();
+            map.put(idColumnKey, rs.getInt("student.id"));
+            map.put(fnameColumnKey, rs.getString("fName"));
+            map.put(lnameColumnKey, rs.getString("lName"));
+            map.put(gradeColumnKey, rs.getDouble("grade"));
             arrList.add(map);
         }
-
-
         return FXCollections.observableList(arrList);
+
+    }
+    catch (SQLException e){
+        Alert alert =new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Could not load students");
+    }
+        return null;
     }
 
     @Override
@@ -132,33 +139,42 @@ public class TeacherDaoSql implements TeacherDao{
     }
 
     @Override
-    public Double getClassAverage(int id) throws SQLException {
-        PreparedStatement pstmt= conn.prepareStatement("Select avg(grade) as avg from student_class where class_id=?" );
-        pstmt.setInt(1,id);
-        ResultSet rs= pstmt.executeQuery();
+    public Double getClassAverage(int id) {
+        try (PreparedStatement pstmt = conn.prepareStatement("Select avg(grade) as avg from student_class where class_id=?")) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
 
-        rs.next();
+            rs.next();
 
-        return DoubleRounder.round(rs.getDouble("avg"),2);
+            return DoubleRounder.round(rs.getDouble("avg"), 2);
+        }catch (SQLException e){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Could not get average");
+        }
+        return null;
     }
 
     @Override
-    public Double getClassMedian(int id) throws SQLException {
-        PreparedStatement pstmt=conn.prepareStatement("SELECT AVG(grade) as median_val\n" +
+    public Double getClassMedian(int id) {
+        try (PreparedStatement pstmt = conn.prepareStatement("SELECT AVG(grade) as median_val\n" +
                 "FROM (\n" +
                 "SELECT sc.grade, @rownum:=@rownum+1 as `row_number`, @total_rows:=@rownum\n" +
                 "  FROM student_class sc, (SELECT @rownum:=0) r\n" +
                 "  WHERE sc.class_id=?\n" +
                 "  ORDER BY sc.grade\n" +
                 ") as med\n" +
-                "WHERE med.row_number IN ( FLOOR((@total_rows+1)/2), FLOOR((@total_rows+2)/2) );");
+                "WHERE med.row_number IN ( FLOOR((@total_rows+1)/2), FLOOR((@total_rows+2)/2) );")) {
 
-        pstmt.setInt(1,id);
-        ResultSet rs= pstmt.executeQuery();
-        rs.next();
-        return DoubleRounder.round(rs.getDouble("median_val"),2);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            return DoubleRounder.round(rs.getDouble("median_val"), 2);
+        }catch (SQLException e){
+            Alert alert=new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Could not get median");
+        }
+        return null;
     }
-
     @Override
     public boolean addStudent(int studentId, int classId, double grade) throws SQLException {
         PreparedStatement pstmt= conn.prepareStatement("insert into student_class values(?,?,?)");
@@ -167,5 +183,33 @@ public class TeacherDaoSql implements TeacherDao{
         pstmt.setDouble(3,grade);
         int count= pstmt.executeUpdate();
         return count>0;
+    }
+
+    @Override
+    public boolean updateStudent(int studentId, int classId, double grade) throws SQLException {
+        PreparedStatement pstmt= conn.prepareStatement("Update Student_Class set grade=? where student_id=? and class_id=?");
+
+        pstmt.setDouble(1,grade);
+        pstmt.setInt(2,studentId);
+        pstmt.setInt(3,classId);
+        int count= pstmt.executeUpdate();
+
+        return count>0;
+    }
+
+    @Override
+    public boolean removeStudent(int studentId, int classId) {
+      try(  PreparedStatement pstmt=conn.prepareStatement("delete from student_class where student_id=? and class_id=?")) {
+          pstmt.setInt(1, studentId);
+          pstmt.setInt(2, classId);
+          int count = pstmt.executeUpdate();
+
+          return count > 0;
+      }catch (SQLException e){
+          Alert alert=new Alert(Alert.AlertType.ERROR);
+          alert.setContentText("Could not Delete Student");
+      }
+
+        return false;
     }
 }

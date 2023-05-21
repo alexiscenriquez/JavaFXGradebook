@@ -17,12 +17,14 @@ public interface TeacherDao {
     Optional<Teachers> authenticate(String username, String password) throws SQLException;
 
     List<Classes> getTeacherClasses(int id) throws SQLException;
-    ObservableList<Map<String,Object>> getClassStudents(int id) throws SQLException;
+    ObservableList<Map<String,Object>> getClassStudents(int id) ;
     List<Student> getStudents(int id)throws SQLException;
     Classes getClass(int id)throws SQLException;
 
-    Double getClassAverage(int id) throws SQLException;
-    Double getClassMedian(int id) throws SQLException;
+    Double getClassAverage(int id) ;
+    Double getClassMedian(int id) ;
 
     boolean addStudent(int studentId, int classId, double grade) throws SQLException;
+    boolean updateStudent(int studentId, int classId,double grade) throws SQLException;
+    boolean removeStudent(int studentId, int classId) throws SQLException;
 }
