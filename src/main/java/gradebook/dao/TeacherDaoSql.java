@@ -26,7 +26,7 @@ public class TeacherDaoSql implements TeacherDao{
     }
 
     @Override
-    public Optional<Teachers> authenticate(String username, String password) throws SQLException {
+    public Optional<Teachers> authenticate(String username, String password){
         Teachers teacher = null;
         try (PreparedStatement pstmt = conn.prepareStatement("select * from teacher where username=? and password=?")) {
             pstmt.setString(1, username);
@@ -39,8 +39,6 @@ public class TeacherDaoSql implements TeacherDao{
                 String lName = rs.getString("last_name");
                 teacher = new Teachers(id, fName, lName);
             }
-
-            //			System.out.println("Welcome "+ uName +"!" +"\n\n");
             return Optional.of(teacher);
 
         }
@@ -48,6 +46,24 @@ public class TeacherDaoSql implements TeacherDao{
             System.out.println("User not found");
         }
         return Optional.empty();
+    }
+
+    @Override
+    public boolean addTeacher(Teachers teacher) {
+       try(PreparedStatement pstmt = conn.prepareStatement("insert into Teacher values(null,?,?,?,?)")) {
+           pstmt.setString(1, teacher.getfName());
+           pstmt.setString(2, teacher.getlName());
+           pstmt.setString(3, teacher.getUsername());
+           pstmt.setString(4, teacher.getPassword());
+           int count = pstmt.executeUpdate();
+           return count > 0;
+       }
+       catch (SQLException e){
+           Alert alert=new Alert(Alert.AlertType.ERROR);
+           alert.setContentText("User name has already been taken");
+           alert.show();
+       }
+        return false;
     }
 
     @Override
@@ -133,7 +149,8 @@ public class TeacherDaoSql implements TeacherDao{
             }
         }
       catch (SQLException e){
-          System.out.println(e.getMessage());
+        Alert alert=new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Could not get class");
       }
         return null;
     }
@@ -210,6 +227,21 @@ public class TeacherDaoSql implements TeacherDao{
           alert.setContentText("Could not Delete Student");
       }
 
+        return false;
+    }
+
+    @Override
+    public boolean addClass(Classes classes) {
+        try(PreparedStatement pstmt= conn.prepareStatement("Insert into Class values(null,? ,?,?)")){
+            pstmt.setInt(1,classes.getTeacherId());
+            pstmt.setString(2, classes.getName());
+            pstmt.setInt(3,classes.getNum());
+            int count = pstmt.executeUpdate();
+            return count>0;
+        } catch (SQLException e) {
+          Alert alert=new Alert(Alert.AlertType.ERROR);
+          alert.setContentText("Could not Add Class");
+        }
         return false;
     }
 }

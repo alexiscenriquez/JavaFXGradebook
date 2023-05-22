@@ -6,6 +6,7 @@ import gradebook.dao.TeacherDaoSql;
 import gradebook.models.Classes;
 import gradebook.models.Teachers;
 import com.jfoenix.controls.JFXListView;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,7 +38,7 @@ Label loginValidation;
             teacher.setConnection();
             Optional<Teachers> found= teacher.authenticate(username.getText(), password.getText());
             if(found.isEmpty()){
-            loginValidation.setText("Account not found");
+            loginValidation.setText("Invalid password ");
             }
             else {
                 FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("gradebook-view.fxml"));
@@ -56,5 +57,23 @@ Label loginValidation;
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void onRegisterButtonClick(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register.fxml"));
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+            RegisterController RController= fxmlLoader.getController();
+        Stage home = (Stage) loginValidation.getScene().getWindow();
+        home.setScene(new Scene(root, 320, 433));
+        home.setTitle("Register");
+
+
+        home.show();
     }
 }

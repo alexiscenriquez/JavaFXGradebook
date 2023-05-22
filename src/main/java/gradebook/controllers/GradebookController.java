@@ -1,5 +1,7 @@
 package gradebook.controllers;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import gradebook.HelloApplication;
 import gradebook.dao.TeacherDaoSql;
 import gradebook.models.Classes;
@@ -7,6 +9,7 @@ import gradebook.models.Teachers;
 import gradebook.util.ClassTableUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,9 +33,23 @@ public class GradebookController implements Initializable {
 
     @FXML
     public VBox vbox;
+    @FXML
     public Label welcome;
+    @FXML
+    public Label nameLabel;
+    @FXML
+    public JFXTextField cNameText;
+    @FXML
+    public Label numLabel;
+    @FXML
+    public JFXTextField numText;
+    @FXML
+    public JFXButton submit;
     Teachers currentUser;
+    @FXML
     TableView<Classes> tableview;
+    TeacherDaoSql teacher = new TeacherDaoSql();
+    private List<Classes> list;
 
     public void setCurrentUser(Teachers currentUser) {
         this.currentUser = currentUser;
@@ -40,13 +57,13 @@ public class GradebookController implements Initializable {
 
     public void initData(Teachers teachers) {
         setCurrentUser(teachers);
-        TeacherDaoSql teacher = new TeacherDaoSql();
+
         try {
             teacher.setConnection();
         } catch (SQLException | ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
-        List<Classes> list = null;
+
         welcome.setText(welcome.getText() + " " + currentUser.getfName() + " " + currentUser.getlName());
         list = teacher.getTeacherClasses(currentUser.getId());
         ObservableList<Classes> oList = FXCollections.observableList(list);
@@ -89,4 +106,29 @@ public class GradebookController implements Initializable {
 
     }
 
+    public void showForm(ActionEvent actionEvent) {
+
+        cNameText.setVisible(true);
+        nameLabel.setVisible(true);
+        numLabel.setVisible(true);
+        numText.setVisible(true);
+        submit.setVisible(true);
+
+    }
+
+
+    public void addClass(ActionEvent actionEvent) {
+        Classes classes=new Classes(0, cNameText.getText(), Integer.valueOf(numText.getText()), currentUser.getId());
+if(teacher.addClass(classes)){
+    cNameText.setVisible(false);
+    nameLabel.setVisible(false);
+    numLabel.setVisible(false);
+    numText.setVisible(false);
+    submit.setVisible(false);
+list = teacher.getTeacherClasses(currentUser.getId());
+    ObservableList<Classes> oList = FXCollections.observableList(list);
+    tableview.setItems(oList);
+}
+
+    }
 }
